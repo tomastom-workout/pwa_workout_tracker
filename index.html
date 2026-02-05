@@ -16,7 +16,10 @@
 <body>
   <div class="app">
     <header class="header">
-      <h1>🏋️ Workout Tracker</h1>
+      <div class="header-row">
+        <h1>🏋️ Workout Tracker</h1>
+        <button class="settings-btn" id="settingsBtn">⚙️</button>
+      </div>
       <div class="date-display" id="dateDisplay"></div>
     </header>
 
@@ -32,10 +35,57 @@
 
     <footer class="footer">
       <div class="footer-buttons">
-        <button class="export-btn" id="exportBtn">📤 エクスポート</button>
+        <button class="image-btn" id="imageBtn">🎨 今日の画像</button>
+        <button class="export-btn" id="exportBtn">📤</button>
         <button class="save-btn" id="saveBtn">💾 保存</button>
       </div>
     </footer>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>⚙️ 設定</h2>
+        <button class="modal-close" id="closeSettings">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="apiKey">OpenRouter API Key</label>
+          <input type="password" id="apiKey" placeholder="sk-or-...">
+          <small>画像生成に必要です</small>
+        </div>
+        <hr>
+        <h3>🎨 画像プロンプト設定</h3>
+        <div class="form-group">
+          <label for="promptCharacter">キャラクター</label>
+          <input type="text" id="promptCharacter" placeholder="例: 黒髪ポニーテールの女の子">
+        </div>
+        <div class="form-group">
+          <label for="promptOutfit">服装</label>
+          <input type="text" id="promptOutfit" placeholder="例: スポーツブラとレギンス">
+        </div>
+        <div class="form-group">
+          <label for="promptDialog">セリフ</label>
+          <input type="text" id="promptDialog" placeholder="例: 今日もお疲れ様！">
+        </div>
+        <button class="save-settings-btn" id="saveSettings">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Display Modal -->
+  <div class="modal-overlay" id="imageModal">
+    <div class="modal image-modal">
+      <button class="modal-close" id="closeImage">✕</button>
+      <div class="image-container" id="imageContainer">
+        <div class="loading-spinner" id="imageLoading">
+          <div class="spinner"></div>
+          <p>画像を生成中...</p>
+        </div>
+        <img id="generatedImage" alt="Generated Image">
+      </div>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>

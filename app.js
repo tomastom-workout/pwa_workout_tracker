@@ -380,6 +380,185 @@ function showToast(message) {
 saveBtn.addEventListener('click', () => saveTodayData(true));
 exportBtn.addEventListener('click', exportAllData);
 
+// ===== Settings Modal =====
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsModal = document.getElementById('settingsModal');
+const closeSettings = document.getElementById('closeSettings');
+const saveSettingsBtn = document.getElementById('saveSettings');
+const apiKeyInput = document.getElementById('apiKey');
+const promptCharacterInput = document.getElementById('promptCharacter');
+const promptOutfitInput = document.getElementById('promptOutfit');
+const promptDialogInput = document.getElementById('promptDialog');
+
+function loadSettings() {
+  const settings = JSON.parse(localStorage.getItem('imageSettings') || '{}');
+  apiKeyInput.value = settings.apiKey || '';
+  promptCharacterInput.value = settings.character || '黒髪ポニーテールの女の子';
+  promptOutfitInput.value = settings.outfit || 'スポーツブラとレギンス';
+  promptDialogInput.value = settings.dialog || '今日もお疲れ様！';
+}
+
+function saveSettings() {
+  const settings = {
+    apiKey: apiKeyInput.value,
+    character: promptCharacterInput.value,
+    outfit: promptOutfitInput.value,
+    dialog: promptDialogInput.value
+  };
+  localStorage.setItem('imageSettings', JSON.stringify(settings));
+  showToast('設定を保存しました');
+  settingsModal.classList.remove('show');
+}
+
+settingsBtn.addEventListener('click', () => {
+  loadSettings();
+  settingsModal.classList.add('show');
+});
+
+closeSettings.addEventListener('click', () => {
+  settingsModal.classList.remove('show');
+});
+
+saveSettingsBtn.addEventListener('click', saveSettings);
+
+settingsModal.addEventListener('click', (e) => {
+  if (e.target === settingsModal) {
+    settingsModal.classList.remove('show');
+  }
+});
+
+// ===== Image Generation =====
+const imageBtn = document.getElementById('imageBtn');
+const imageModal = document.getElementById('imageModal');
+const closeImage = document.getElementById('closeImage');
+const imageLoading = document.getElementById('imageLoading');
+const generatedImage = document.getElementById('generatedImage');
+
+function getImageCacheKey() {
+  return `generatedImage_${getTodayString()}`;
+}
+
+function getCachedImage() {
+  const cached = localStorage.getItem(getImageCacheKey());
+  if (cached) {
+    try {
+      return JSON.parse(cached);
+    } catch (e) {
+      return null;
+    }
+  }
+  return null;
+}
+
+function cacheImage(imageUrl) {
+  localStorage.setItem(getImageCacheKey(), JSON.stringify({
+    date: getTodayString(),
+    imageUrl: imageUrl
+  }));
+}
+
+function buildPrompt() {
+  const settings = JSON.parse(localStorage.getItem('imageSettings') || '{}');
+  const character = settings.character || '黒髪ポニーテールの女の子';
+  const outfit = settings.outfit || 'スポーツブラとレギンス';
+  const dialog = settings.dialog || '今日もお疲れ様！';
+
+  return `ジムで${character}が${outfit}で筋トレしながらviewerに「${dialog}」と言っているアニメイラストを生成してください。`;
+}
+
+async function generateImage() {
+  const settings = JSON.parse(localStorage.getItem('imageSettings') || '{}');
+  const apiKey = settings.apiKey;
+
+  if (!apiKey) {
+    showToast('APIキーを設定してください');
+    loadSettings();
+    settingsModal.classList.add('show');
+    return;
+  }
+
+  // Check cache
+  const cached = getCachedImage();
+  if (cached && cached.imageUrl) {
+    showCachedImage(cached.imageUrl);
+    return;
+  }
+
+  // Show loading
+  imageModal.classList.add('show');
+  imageLoading.style.display = 'block';
+  generatedImage.classList.remove('loaded');
+
+  const prompt = buildPrompt();
+  console.log('Generating image with prompt:', prompt);
+
+  try {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-3-pro-image-preview',
+        messages: [
+          { role: 'user', content: prompt }
+        ],
+        modalities: ['image', 'text'],
+        image_config: {
+          aspect_ratio: '9:16',
+          image_size: '1K'
+        }
+      })
+    });
+
+    const result = await response.json();
+    console.log('API Response:', result);
+
+    if (result.error) {
+      throw new Error(result.error.message || 'API Error');
+    }
+
+    const imageUrl = result.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+
+    if (imageUrl) {
+      cacheImage(imageUrl);
+      showGeneratedImage(imageUrl);
+    } else {
+      throw new Error('画像が生成されませんでした');
+    }
+  } catch (error) {
+    console.error('Image generation error:', error);
+    showToast('画像生成に失敗: ' + error.message);
+    imageModal.classList.remove('show');
+  }
+}
+
+function showGeneratedImage(imageUrl) {
+  imageLoading.style.display = 'none';
+  generatedImage.src = imageUrl;
+  generatedImage.classList.add('loaded');
+}
+
+function showCachedImage(imageUrl) {
+  imageModal.classList.add('show');
+  imageLoading.style.display = 'none';
+  generatedImage.src = imageUrl;
+  generatedImage.classList.add('loaded');
+}
+
+imageBtn.addEventListener('click', generateImage);
+
+closeImage.addEventListener('click', () => {
+  imageModal.classList.remove('show');
+});
+
+imageModal.addEventListener('click', (e) => {
+  if (e.target === imageModal) {
+    imageModal.classList.remove('show');
+  }
+});
+
 // ===== Init =====
 async function init() {
   // Display date
@@ -403,3 +582,4 @@ async function init() {
 }
 
 init();
+
