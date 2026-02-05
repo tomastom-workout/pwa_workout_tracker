@@ -501,7 +501,9 @@ async function generateImage() {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'HTTP-Referer': window.location.href,
+        'X-Title': 'Workout Tracker'
       },
       body: JSON.stringify({
         model: 'google/gemini-3-pro-image-preview',
