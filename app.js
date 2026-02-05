@@ -410,10 +410,14 @@ function saveSettings() {
   settingsModal.classList.remove('show');
 }
 
-settingsBtn.addEventListener('click', () => {
+function openSettings(e) {
+  e.preventDefault();
   loadSettings();
   settingsModal.classList.add('show');
-});
+}
+
+settingsBtn.addEventListener('click', openSettings);
+settingsBtn.addEventListener('touchend', openSettings);
 
 closeSettings.addEventListener('click', () => {
   settingsModal.classList.remove('show');
@@ -547,7 +551,13 @@ function showCachedImage(imageUrl) {
   generatedImage.classList.add('loaded');
 }
 
-imageBtn.addEventListener('click', generateImage);
+function handleImageBtn(e) {
+  e.preventDefault();
+  generateImage();
+}
+
+imageBtn.addEventListener('click', handleImageBtn);
+imageBtn.addEventListener('touchend', handleImageBtn);
 
 closeImage.addEventListener('click', () => {
   imageModal.classList.remove('show');

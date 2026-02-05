@@ -63,8 +63,8 @@ body {
 }
 
 .settings-btn {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: none;
   border-radius: 10px;
   background: var(--bg-card);
@@ -72,9 +72,15 @@ body {
   font-size: 1.2rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+  position: relative;
+  z-index: 10;
 }
 
-.settings-btn:hover {
+.settings-btn:hover,
+.settings-btn:active {
   background: var(--bg-card-hover);
 }
 
@@ -405,9 +411,15 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+  position: relative;
+  z-index: 1;
 }
 
-.image-btn:hover {
+.image-btn:hover,
+.image-btn:active {
   background: rgba(233, 69, 96, 0.2);
 }
 
