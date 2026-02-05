@@ -471,10 +471,17 @@ function buildPrompt() {
 }
 
 async function generateImage() {
-  const settings = JSON.parse(localStorage.getItem('imageSettings') || '{}');
+  const settingsRaw = localStorage.getItem('imageSettings');
+  console.log('Raw settings:', settingsRaw);
+
+  const settings = JSON.parse(settingsRaw || '{}');
   const apiKey = settings.apiKey;
 
-  if (!apiKey) {
+  console.log('API Key exists:', !!apiKey);
+  console.log('API Key length:', apiKey ? apiKey.length : 0);
+  console.log('API Key prefix:', apiKey ? apiKey.substring(0, 10) + '...' : 'none');
+
+  if (!apiKey || apiKey.trim() === '') {
     showToast('APIキーを設定してください');
     loadSettings();
     settingsModal.classList.add('show');
