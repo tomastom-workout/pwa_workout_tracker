@@ -505,28 +505,34 @@ async function generateImage() {
   generatedImage.classList.remove('loaded');
 
   const prompt = buildPrompt();
-  console.log('Generating image with prompt:', prompt);
+
+  // Debug: show API key info before request
+  alert(`リクエスト送信前の確認:\nKey length: ${apiKey.length}\nKey prefix: ${apiKey.substring(0, 15)}...`);
 
   try {
+    const requestHeaders = {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': window.location.href,
+      'X-Title': 'Workout Tracker'
+    };
+
+    const requestBody = {
+      model: 'google/gemini-3-pro-image-preview',
+      messages: [
+        { role: 'user', content: prompt }
+      ],
+      modalities: ['image', 'text'],
+      image_config: {
+        aspect_ratio: '9:16',
+        image_size: '1K'
+      }
+    };
+
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': window.location.href,
-        'X-Title': 'Workout Tracker'
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-3-pro-image-preview',
-        messages: [
-          { role: 'user', content: prompt }
-        ],
-        modalities: ['image', 'text'],
-        image_config: {
-          aspect_ratio: '9:16',
-          image_size: '1K'
-        }
-      })
+      headers: requestHeaders,
+      body: JSON.stringify(requestBody)
     });
 
     const result = await response.json();
