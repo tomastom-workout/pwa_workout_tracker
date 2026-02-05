@@ -1,0 +1,399 @@
+/* ===== CSS Variables ===== */
+:root {
+  --bg-primary: #0f0f1a;
+  --bg-secondary: #1a1a2e;
+  --bg-card: #16213e;
+  --bg-card-hover: #1f2b4d;
+  --accent: #e94560;
+  --accent-glow: rgba(233, 69, 96, 0.3);
+  --text-primary: #eaeaea;
+  --text-secondary: #a0a0a0;
+  --text-muted: #666;
+  --success: #4ecca3;
+  --border: #2a2a4a;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== Reset & Base ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== App Container ===== */
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding-bottom: 100px;
+}
+
+/* ===== Header ===== */
+.header {
+  padding: 20px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.date-display {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ===== Package Tabs ===== */
+.package-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px 20px;
+  background: var(--bg-secondary);
+  position: sticky;
+  top: 76px;
+  z-index: 99;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px 8px;
+  border: none;
+  border-radius: 12px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+.tab:hover {
+  background: var(--bg-card-hover);
+}
+
+.tab.active {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+/* ===== Exercise List ===== */
+.exercise-list {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===== Exercise Card ===== */
+.exercise-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.exercise-card.completed {
+  border-color: var(--success);
+  background: linear-gradient(135deg, var(--bg-card), rgba(78, 204, 163, 0.1));
+}
+
+.exercise-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.complete-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.complete-check:hover {
+  border-color: var(--success);
+}
+
+.complete-check.checked {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.exercise-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.exercise-type {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+}
+
+/* ===== Weight Inputs ===== */
+.weight-section {
+  margin-top: 12px;
+}
+
+.sets-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.set-input-wrapper {
+  flex: 1;
+  text-align: center;
+}
+
+.set-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.set-input {
+  width: 100%;
+  padding: 14px 8px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.set-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.unit-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ===== Adjust Buttons ===== */
+.adjust-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.adjust-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.adjust-btn:hover {
+  background: var(--bg-card-hover);
+}
+
+.adjust-btn:active {
+  transform: scale(0.95);
+}
+
+.adjust-btn.minus {
+  color: #ff6b6b;
+}
+
+.adjust-btn.plus {
+  color: var(--success);
+}
+
+/* ===== Bodyweight Card ===== */
+.bodyweight-message {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: 20px 0;
+}
+
+/* ===== Footer ===== */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 20px;
+  background: linear-gradient(to top, var(--bg-primary), rgba(15, 15, 26, 0.95));
+  backdrop-filter: blur(10px);
+}
+
+.save-btn {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  display: block;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), #d63a52);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px var(--accent-glow);
+}
+
+.save-btn:active {
+  transform: translateY(0);
+}
+
+/* ===== Toast Notification ===== */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  padding: 14px 28px;
+  background: var(--success);
+  color: #0f0f1a;
+  font-weight: 600;
+  border-radius: 12px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 200;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ===== Loading State ===== */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 360px) {
+  .set-input {
+    font-size: 1.1rem;
+    padding: 12px 6px;
+  }
+
+  .adjust-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* ===== Previous Comparison ===== */
+.prev-comparison {
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+}
+
+.prev-comparison.up {
+  background: rgba(78, 204, 163, 0.15);
+  color: var(--success);
+}
+
+.prev-comparison.down {
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+}
+
+.prev-comparison.same {
+  color: var(--text-secondary);
+}
+
+.prev-comparison .diff {
+  font-weight: 700;
+}
+
+/* ===== Footer Buttons ===== */
+.footer-buttons {
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+}
+
+.export-btn {
+  flex: 1;
+  padding: 16px;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.export-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--text-muted);
+}
+
+.export-btn:active {
+  transform: scale(0.98);
+}
+
+.save-btn {
+  flex: 2;
+}

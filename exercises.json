@@ -1,0 +1,25 @@
+{
+  "packages": {
+    "α": [
+      { "id": "squat", "name": "バーベル・スクワット", "type": "weight", "defaultWeight": 60 },
+      { "id": "db-bench", "name": "ダンベル・ベンチプレス", "type": "weight", "defaultWeight": 20 },
+      { "id": "chinup", "name": "チンニング", "type": "bodyweight" },
+      { "id": "ohp", "name": "オーバーヘッド・プレス", "type": "weight", "defaultWeight": 30 },
+      { "id": "leg-raise", "name": "ハンギング・レッグレイズ", "type": "bodyweight" }
+    ],
+    "β": [
+      { "id": "hack-slide", "name": "ハックスライド", "type": "weight", "defaultWeight": 60 },
+      { "id": "incline-chest", "name": "インクライン・チェストプレス", "type": "weight", "defaultWeight": 40 },
+      { "id": "tbar-row", "name": "Tバー・ロウ", "type": "weight", "defaultWeight": 40 },
+      { "id": "shoulder-press-pl", "name": "ショルダープレス (PL)", "type": "weight", "defaultWeight": 30 },
+      { "id": "hip-abduction", "name": "リンクヒップアブダクション", "type": "weight", "defaultWeight": 40 }
+    ],
+    "γ": [
+      { "id": "leg-ext-curl", "name": "レッグエクステンション & カール", "type": "weight", "defaultWeight": 40 },
+      { "id": "pec-fly", "name": "ペクトラル・フライ", "type": "weight", "defaultWeight": 50 },
+      { "id": "lat-pulldown", "name": "ラットプルダウン", "type": "weight", "defaultWeight": 50 },
+      { "id": "lateral-raise", "name": "スタンディング・ラテラルレイズ", "type": "weight", "defaultWeight": 15 },
+      { "id": "cable-arms", "name": "ケーブル・プレスダウン & カール", "type": "weight", "defaultWeight": 20 }
+    ]
+  }
+}

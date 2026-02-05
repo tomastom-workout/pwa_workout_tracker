@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#e94560">
+  <title>Workout Tracker</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>🏋️ Workout Tracker</h1>
+      <div class="date-display" id="dateDisplay"></div>
+    </header>
+
+    <nav class="package-tabs">
+      <button class="tab" data-package="α">α Alpha</button>
+      <button class="tab" data-package="β">β Beta</button>
+      <button class="tab" data-package="γ">γ Gamma</button>
+    </nav>
+
+    <main class="exercise-list" id="exerciseList">
+      <!-- Exercises will be rendered here -->
+    </main>
+
+    <footer class="footer">
+      <div class="footer-buttons">
+        <button class="export-btn" id="exportBtn">📤 エクスポート</button>
+        <button class="save-btn" id="saveBtn">💾 保存</button>
+      </div>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
