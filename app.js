@@ -477,11 +477,15 @@ async function generateImage() {
   const settings = JSON.parse(settingsRaw || '{}');
   const apiKey = settings.apiKey;
 
+  // Debug: show alert on mobile
+  const debugInfo = `Key exists: ${!!apiKey}\nKey length: ${apiKey ? apiKey.length : 0}\nKey starts with: ${apiKey ? apiKey.substring(0, 12) : 'none'}`;
+
   console.log('API Key exists:', !!apiKey);
   console.log('API Key length:', apiKey ? apiKey.length : 0);
   console.log('API Key prefix:', apiKey ? apiKey.substring(0, 10) + '...' : 'none');
 
   if (!apiKey || apiKey.trim() === '') {
+    alert('APIキーが見つかりません\n\n' + debugInfo);
     showToast('APIキーを設定してください');
     loadSettings();
     settingsModal.classList.add('show');
@@ -542,6 +546,7 @@ async function generateImage() {
     }
   } catch (error) {
     console.error('Image generation error:', error);
+    alert('画像生成エラー:\n\n' + error.message + '\n\nAPIキーが正しく設定されているか確認してください。');
     showToast('画像生成に失敗: ' + error.message);
     imageModal.classList.remove('show');
   }
