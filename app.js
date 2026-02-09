@@ -438,29 +438,6 @@ const closeImage = document.getElementById('closeImage');
 const imageLoading = document.getElementById('imageLoading');
 const generatedImage = document.getElementById('generatedImage');
 
-function getImageCacheKey() {
-  return `generatedImage_${getTodayString()}`;
-}
-
-function getCachedImage() {
-  const cached = localStorage.getItem(getImageCacheKey());
-  if (cached) {
-    try {
-      return JSON.parse(cached);
-    } catch (e) {
-      return null;
-    }
-  }
-  return null;
-}
-
-function cacheImage(imageUrl) {
-  localStorage.setItem(getImageCacheKey(), JSON.stringify({
-    date: getTodayString(),
-    imageUrl: imageUrl
-  }));
-}
-
 function buildPrompt() {
   const settings = JSON.parse(localStorage.getItem('imageSettings') || '{}');
   const character = settings.character || '黒髪ポニーテールの女の子';
@@ -471,31 +448,13 @@ function buildPrompt() {
 }
 
 async function generateImage() {
-  const settingsRaw = localStorage.getItem('imageSettings');
-  console.log('Raw settings:', settingsRaw);
-
-  const settings = JSON.parse(settingsRaw || '{}');
+  const settings = JSON.parse(localStorage.getItem('imageSettings') || '{}');
   const apiKey = settings.apiKey;
 
-  // Debug: show alert on mobile
-  const debugInfo = `Key exists: ${!!apiKey}\nKey length: ${apiKey ? apiKey.length : 0}\nKey starts with: ${apiKey ? apiKey.substring(0, 12) : 'none'}`;
-
-  console.log('API Key exists:', !!apiKey);
-  console.log('API Key length:', apiKey ? apiKey.length : 0);
-  console.log('API Key prefix:', apiKey ? apiKey.substring(0, 10) + '...' : 'none');
-
   if (!apiKey || apiKey.trim() === '') {
-    alert('APIキーが見つかりません\n\n' + debugInfo);
     showToast('APIキーを設定してください');
     loadSettings();
     settingsModal.classList.add('show');
-    return;
-  }
-
-  // Check cache
-  const cached = getCachedImage();
-  if (cached && cached.imageUrl) {
-    showCachedImage(cached.imageUrl);
     return;
   }
 
@@ -506,37 +465,29 @@ async function generateImage() {
 
   const prompt = buildPrompt();
 
-  // Debug: show API key info before request
-  alert(`リクエスト送信前の確認:\nKey length: ${apiKey.length}\nKey prefix: ${apiKey.substring(0, 15)}...`);
-
   try {
-    const requestHeaders = {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': window.location.href,
-      'X-Title': 'Workout Tracker'
-    };
-
-    const requestBody = {
-      model: 'google/gemini-3-pro-image-preview',
-      messages: [
-        { role: 'user', content: prompt }
-      ],
-      modalities: ['image', 'text'],
-      image_config: {
-        aspect_ratio: '9:16',
-        image_size: '1K'
-      }
-    };
-
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
-      headers: requestHeaders,
-      body: JSON.stringify(requestBody)
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': window.location.href,
+        'X-Title': 'Workout Tracker'
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-3-pro-image-preview',
+        messages: [
+          { role: 'user', content: prompt }
+        ],
+        modalities: ['image', 'text'],
+        image_config: {
+          aspect_ratio: '9:16',
+          image_size: '1K'
+        }
+      })
     });
 
     const result = await response.json();
-    console.log('API Response:', result);
 
     if (result.error) {
       throw new Error(result.error.message || 'API Error');
@@ -545,27 +496,18 @@ async function generateImage() {
     const imageUrl = result.choices?.[0]?.message?.images?.[0]?.image_url?.url;
 
     if (imageUrl) {
-      cacheImage(imageUrl);
       showGeneratedImage(imageUrl);
     } else {
       throw new Error('画像が生成されませんでした');
     }
   } catch (error) {
     console.error('Image generation error:', error);
-    alert('画像生成エラー:\n\n' + error.message + '\n\nAPIキーが正しく設定されているか確認してください。');
     showToast('画像生成に失敗: ' + error.message);
     imageModal.classList.remove('show');
   }
 }
 
 function showGeneratedImage(imageUrl) {
-  imageLoading.style.display = 'none';
-  generatedImage.src = imageUrl;
-  generatedImage.classList.add('loaded');
-}
-
-function showCachedImage(imageUrl) {
-  imageModal.classList.add('show');
   imageLoading.style.display = 'none';
   generatedImage.src = imageUrl;
   generatedImage.classList.add('loaded');
